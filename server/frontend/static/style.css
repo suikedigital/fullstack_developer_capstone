@@ -124,3 +124,8 @@ img{
     text-align:center;
     box-shadow: 2px 2px 3px #999;  
 }
+.separator {
+    width: 2px;
+    background-color: black;
+    margin: 0 20px; /* space around the separator */
+}
