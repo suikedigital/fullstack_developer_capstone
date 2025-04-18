@@ -69,9 +69,8 @@ def get_dealer_reviews(request, dealer_id):
         reviews = get_request(endpoint)
         for review_details in reviews:
             response = analyze_review_sentiments(review_details['review'])
-            print(response)
-            review_detail['sentiment'] = response['sentiment']
-        return JsonResponse({"status": 200, "reviews": reviews, "review_detail": review_detail})
+            review_details['sentiment'] = response['sentiment']
+        return JsonResponse({"status": 200, "reviews": reviews})
     else:
         return JsonResponse({"status": 400, "message": "Bad Request"})
 
@@ -94,7 +93,7 @@ def add_review(request):
             print("Received review data:", data)
 
             review = {
-                "time": datetime.datetime.utcnow().isoformat(),
+                "time": datetime.utcnow().isoformat(),
                 "name": data.get("name", "Anonymous"),
                 "dealership": int(data["dealership"]),
                 "review": data["review"],
