@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 def get_cars(request):
     count = CarMake.objects.filter().count()
     print(count)
-    if(count == 0):
+    if (count == 0):
         initiate()
     car_models = CarModel.objects.select_related('car_make')
     cars = []
@@ -71,7 +71,7 @@ def get_dealer_reviews(request, dealer_id):
             response = analyze_review_sentiments(review_details['review'])
             print(response)
             review_detail['sentiment'] = response['sentiment']
-        return JsonResponse({"status": 200, "reviews": reviews})
+        return JsonResponse({"status": 200, "reviews": reviews, "review_detail": review_detail})
     else:
         return JsonResponse({"status": 400, "message": "Bad Request"})
 
@@ -82,7 +82,7 @@ def get_dealer_details(request, dealer_id):
         dealership = get_request(endpoint)
         return JsonResponse({"status": 200, "dealer": dealership})
     else:
-        return JsonResponse({"status": 400,"message": "Bad Request"})
+        return JsonResponse({"status": 400, "message": "Bad Request"})
 
 
 # Create a `add_review` view to submit a review
