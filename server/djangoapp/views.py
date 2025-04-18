@@ -1,6 +1,3 @@
-from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse
-from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import logout
 from django.contrib import messages
@@ -115,7 +112,13 @@ def add_review(request):
             }
 
             response = post_review({"review": review})
-            return JsonResponse({"status": 200, "message": "Review submitted successfully", "response": response})
+            return JsonResponse(
+                {
+                    "status": 200,
+                    "message": "Review submitted successfully",
+                    "response": response
+                }
+            )
         
         except KeyError as e:
             logger.error(f"Missing key in review submission: {e}")
