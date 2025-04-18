@@ -95,5 +95,35 @@ def get_dealer_details(request, dealer_id):
 
 
 # Create a `add_review` view to submit a review
-# def add_review(request):
-# ...
+@csrf_exempt
+def add_review(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            print("Received review data:", data)
+
+            review = {
+                "time": datetime.datetime.utcnow().isoformat(),
+                "name": data.get("name", "Anonymous"),
+                "dealership": int(data["dealership"]),
+                "review": data["review"],
+                "purchase": data.get("purchase", False),
+                "purchase_date": data.get("purchase_date", ""),
+                "car_make": data.get("car_make", ""),
+                "car_model": data.get("car_model", ""),
+                "car_year": data.get("car_year", ""),
+            }
+
+            response = post_review({"review": review})
+            return JsonResponse({"status": 200, "message": "Review submitted successfully", "response": response})
+        
+        except KeyError as e:
+            logger.error(f"Missing key in review submission: {e}")
+            return JsonResponse({"status": 400, "error": f"Missing field: {e}"})
+
+        except Exception as e:
+            logger.error(f"Error in submitting review: {e}")
+            return JsonResponse({"status": 500, "error": "Internal Server Error"})
+
+    else:
+        return JsonResponse({"status": 405, "message": "Method not allowed"})
